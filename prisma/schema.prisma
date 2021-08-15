@@ -1,0 +1,149 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Client {
+  clientId Int  @default(autoincrement()) @id
+  email String @unique
+  password String
+  address ClientAddress?
+  dateCreated DateTime @default(now())
+  companyName String?
+  firstName String?
+  lastName String?
+  invoices Invoice[]
+  clientType ClientType
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+model ClientAddress {
+  addressId Int @default(autoincrement()) @id
+  address1 String
+  address2 String?
+  zipCode String
+  city String
+  state String
+  client Client @relation(fields: [clientId], references: [clientId])
+  clientId Int
+}
+
+model UserAddress {
+  addressId Int @default(autoincrement()) @id
+  address1 String
+  address2 String?
+  zipCode String
+  city String
+  state String
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+}
+
+model Invoice {
+  invoiceId Int @default(autoincrement()) @id
+  dateCreated DateTime @default(now())
+  dateDue DateTime
+  status InvoiceStatus
+  posthookUrl String
+  total Decimal
+  taxRate Decimal
+  subTotal Decimal
+  pdfUrl String
+  notes String
+  template String
+  dateSent DateTime
+  isRecurring Boolean
+  billingType Frequency
+  items InvoiceItem[]
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  client Client @relation(fields: [clientId], references: [clientId])
+  clientId Int
+}
+
+model InvoiceItem {
+  invoiceItemId Int @default(autoincrement()) @id
+  name String
+  description String
+  quantity Int
+  cost Decimal
+  rate Decimal
+  invoice Invoice @relation(fields: [invoiceId], references: [invoiceId] )
+  invoiceId Int
+}
+
+model Post {
+  id        Int      @default(autoincrement()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String   @db.VarChar(255)
+  content   String?
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+}
+
+model Profile {
+  id     Int     @default(autoincrement()) @id
+  bio    String?
+  user   User    @relation(fields: [userId], references: [id])
+  userId Int     @unique
+}
+
+model User {
+  id      Int      @default(autoincrement()) @id
+  email    String @unique
+  password  String
+  plan PlanType
+  address UserAddress?
+  invoices Invoice[]
+  clients Client[]
+  role Role @default(USER)
+  posts   Post[]
+  profile Profile?
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt   DateTime
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ClientType {
+  INDIVIDUAL
+  COMPANY
+}
+
+enum Frequency {
+  WEEKLY
+  MONTHLY
+  BIMONTHLY
+  QUARTERLY
+  ANNUAL
+}
+
+enum InvoiceStatus {
+  PAID
+  PENDING
+  UNPAID
+}
+
+enum PlanType {
+  BASIC
+  PRO
+  PREMIUM
+}
