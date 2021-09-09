@@ -1,0 +1,63 @@
+.newClient__page {
+  /* padding: 1rem 1rem; */
+}
+
+.newClient__form {
+  width: 18rem;
+  padding: 1rem 0;
+}
+
+.newClient__formRow {
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.newClient__formRow:nth-child(0n + 8) {
+  margin: 0 0 1rem 0;
+}
+
+.newClient__formRow label {
+  margin: 0 0 0.25rem 0;
+}
+
+.newClient__customerTypeInputContainer {
+  display: flex;
+}
+
+.newClient__page input:autofill,
+.newClient__page input:-webkit-autofill {
+  outline: thin solid;
+}
+
+.newClient__page input[type="text"] {
+  width: 100%;
+}
+
+.errorMessage {
+  color: red;
+}
+
+.newClient__submitBtnContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.newClient__createClientBtn {
+  background: transparent;
+  border: none;
+  font-size: 0.875rem;
+  border: thin solid #e9f0f8;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  background-color: #9590dc;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.newClient__createClientBtn:hover {
+  background-color: #8781d7;
+}

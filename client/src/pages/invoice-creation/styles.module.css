@@ -1,0 +1,139 @@
+.main {
+  display: flex;
+}
+.invoiceDetails {
+  width: 42rem;
+  margin: 0 1rem 0 0;
+}
+
+.createInvoice__detailsSection {
+  margin: 0 0 2rem 0;
+}
+
+.createInvoice__detailsSection {
+  display: flex;
+  flex-direction: column;
+}
+
+/* .leftCol {
+  width: 50%;
+} */
+
+.topRow {
+  display: flex;
+  flex-direction: row;
+  margin: 0 0 1rem 0;
+}
+
+.logoPreview {
+  width: 100%;
+  height: calc(100% - 29px);
+  border: thin dashed #d1d5db;
+  border-radius: 0.25rem;
+}
+
+.logoArea,
+.paymentDetails {
+  width: calc(50% - 0.5rem);
+}
+
+.logoArea {
+  margin: 0 1rem 0 0;
+}
+
+.error {
+  color: var(--warning, #ff0000);
+}
+
+/* .rightCol {
+  width: 50%;
+} */
+
+.bottomRow {
+  display: flex;
+}
+
+.leftLabel {
+  display: block;
+  margin: 0 0 0.25rem 0;
+}
+
+.leftInput {
+  width: 100%;
+}
+
+.billTo,
+.billFrom {
+  width: calc(50% - 0.5rem);
+}
+
+.billTo {
+  margin: 0 1rem 0 0;
+}
+
+.areaHeading {
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+/* table {
+  width: 100%;
+}
+
+th {
+  background-color: #fff;
+}
+
+th:first-child {
+  width: 50%;
+} */
+
+.createInvoice__totalsSection {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.totals {
+  width: calc(50% - 0.5rem);
+}
+
+.someRow {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 0.25rem 0;
+}
+
+.someRow:last-of-type {
+  border-top: thin solid grey;
+  padding: 0.25rem 0 0 0;
+}
+
+.settings {
+  width: 16rem;
+}
+
+.invoiceActionButtonsContainer {
+  margin: 0 0 0.5rem 0;
+}
+
+.invoiceActionButtons {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 1rem 0;
+}
+
+.settingsButton {
+  width: calc(50% - 0.5rem);
+  padding: 0.75rem;
+}
+
+.previewButton {
+  width: 100%;
+  padding: 0.75rem;
+}
+
+.controlRow {
+  display: flex;
+  justify-content: space-between;
+}

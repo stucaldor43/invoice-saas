@@ -1,0 +1,38 @@
+.dataCell {
+  padding: 0;
+  background-color: #fff;
+  vertical-align: top;
+}
+
+.input {
+  border: none;
+  text-align: right;
+  width: 100%;
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 0.25rem;
+  resize: none;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.input:focus-visible,
+.textarea:focus-visible {
+  outline: thin solid #6ee7b7;
+}
+
+.trashWrapper {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  padding: 0.5rem 0.75rem;
+}
+
+.trashSvg {
+  margin: 0;
+  cursor: pointer;
+  fill: #e0a2a2;
+}
