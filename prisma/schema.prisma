@@ -16,8 +16,9 @@ model Client {
   address ClientAddress?
   dateCreated DateTime @default(now())
   companyName String?
-  firstName String?
-  lastName String?
+  firstName String
+  lastName String
+  fullName String
   invoices Invoice[]
   clientType ClientType
   user User @relation(fields: [userId], references: [id])

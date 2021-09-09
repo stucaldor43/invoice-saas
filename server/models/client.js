@@ -13,32 +13,16 @@ export async function addClient(data, { user }) {
     state,
   } = data;
 
-  const additionalData = getClientTypeSpecificFields(clientType);
-
-  function getClientTypeSpecificFields(type) {
-    let fields = {};
-
-    switch (type) {
-      case "INDIVIDUAL":
-        fields = { firstName, lastName };
-        break;
-      case "COMPANY":
-        fields = { companyName };
-        break;
-      default:
-        throw Error("Illegal client type provided");
-    }
-
-    return fields;
-  }
-
   const client = await prisma.client.create({
     data: {
+      firstName,
+      lastName,
+      fullName: `${firstName} ${lastName}`,
+      companyName,
       email,
       clientType,
       userId: user.id,
       address: { create: { address1, zipCode, city, state } },
-      ...additionalData,
     },
   });
 
@@ -69,18 +53,10 @@ export async function getClients({ filters, pagination, sort }) {
 export async function getClientsBySearchTerm({ searchTerm, pagination, sort }) {
   const clients = await prisma.client.findMany({
     where: {
-      OR: [
-        {
-          firstName: {
-            contains: searchTerm,
-          },
-        },
-        {
-          lastName: {
-            contains: searchTerm,
-          },
-        },
-      ],
+      fullName: {
+        contains: searchTerm,
+        mode: "insensitive",
+      },
     },
     take: pagination.take,
     skip: pagination.skip,
@@ -89,18 +65,10 @@ export async function getClientsBySearchTerm({ searchTerm, pagination, sort }) {
 
   const clientCount = await prisma.client.count({
     where: {
-      OR: [
-        {
-          firstName: {
-            contains: searchTerm,
-          },
-        },
-        {
-          lastName: {
-            contains: searchTerm,
-          },
-        },
-      ],
+      fullName: {
+        contains: searchTerm,
+        mode: "insensitive",
+      },
     },
     orderBy: sort,
   });

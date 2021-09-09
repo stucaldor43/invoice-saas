@@ -13,25 +13,6 @@ async function addClients(data, { user }) {
     state,
   } = data;
 
-  // const additionalData = getClientTypeSpecificFields(clientType);
-
-  // function getClientTypeSpecificFields(type) {
-  //   let fields = {};
-
-  //   switch (type) {
-  //     case "INDIVIDUAL":
-  //       fields = { companyName };
-  //       break;
-  //     case "COMPANY":
-  //       fields = { companyName };
-  //       break;
-  //     default:
-  //       throw Error("Illegal client type provided");
-  //   }
-
-  //   return fields;
-  // }
-
   const client = await prisma.client.create({
     data: {
       firstName,
@@ -1452,5 +1433,5 @@ const clients = [
 ];
 
 Promise.all(clients.map((c) => addClients(c, { user: { id: 2 } }))).then(
-  (values) => console.log("done")
+  (values) => (process.exitCode = 1)
 );

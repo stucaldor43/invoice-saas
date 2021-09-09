@@ -57,36 +57,32 @@ export default function NewClientPage() {
             </div>
           </div>
         </div>
-        {2 === 2 ? (
-          <div className="newClient__formRow">
-            <label>First Name</label>
-            <input
-              {...register("firstName", {
-                required: true,
-                minLength: 1,
-                maxLength: 128,
-              })}
-              type="text"
-            />
-            {errors.firstName && errors.firstName.type === "required" && (
-              <div className="errorMessage">This is required</div>
-            )}
-          </div>
-        ) : null}
-        {2 === 2 ? (
-          <div className="newClient__formRow">
-            <label>Last Name</label>
-            <input
-              {...register("lastName", {
-                required: true,
-                minLength: 1,
-                maxLength: 128,
-              })}
-              type="text"
-            />
-          </div>
-        ) : null}
-        {getValues("customerType") === "Company" ? (
+        <div className="newClient__formRow">
+          <label>First Name</label>
+          <input
+            {...register("firstName", {
+              required: true,
+              minLength: 1,
+              maxLength: 128,
+            })}
+            type="text"
+          />
+          {errors.firstName && errors.firstName.type === "required" && (
+            <div className="errorMessage">This is required</div>
+          )}
+        </div>
+        <div className="newClient__formRow">
+          <label>Last Name</label>
+          <input
+            {...register("lastName", {
+              required: true,
+              minLength: 1,
+              maxLength: 128,
+            })}
+            type="text"
+          />
+        </div>
+        {getValues("clientType") === "COMPANY" ? (
           <div className="newClient__formRow">
             <label>Company</label>
             <input type="text" />
