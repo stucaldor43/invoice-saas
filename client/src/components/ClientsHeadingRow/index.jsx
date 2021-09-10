@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ChevronUp from "../icons/ChevronUpSvg";
 import ChevronDown from "../icons/ChevronDownSvg";
-import "./styles.module.css";
+import styles from "./styles.module.css";
 
 const ASCENDING = "up";
 const DESCENDING = "down";
@@ -24,7 +24,7 @@ export function ClientsHeadingRow({
 
   return (
     <tr>
-      <th>
+      <th className={styles.categoryHeading}>
         Name
         {clientSortOrder === ASCENDING ? (
           <ChevronUp
@@ -52,7 +52,7 @@ export function ClientsHeadingRow({
           }
         /> */}
       </th>
-      <th>
+      <th className={`${styles.categoryHeading} ${styles.emailHeading}`}>
         Email
         {emailSortOrder === ASCENDING ? (
           <ChevronUp
@@ -72,8 +72,8 @@ export function ClientsHeadingRow({
         {/* <span onClick={() => sortAscending("email")}>&#8593;</span> */}
         {/* <span onClick={() => sortDescending("email")}>&#8595;</span> */}
       </th>
-      <th>Company</th>
-      <th>Date Created</th>
+      <th className={styles.categoryHeading}>Company</th>
+      <th className={styles.categoryHeading}>Date Created</th>
     </tr>
   );
 }

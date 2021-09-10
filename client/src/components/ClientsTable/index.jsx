@@ -1,11 +1,11 @@
 import React from "react";
 import { ClientsHeadingRow } from "../ClientsHeadingRow";
 import { ClientRow } from "./../ClientRow";
-import "./styles.module.css";
+import styles from "./styles.module.css";
 
 export function ClientsTable({ clients, actions }) {
   return (
-    <table>
+    <table className={styles.table}>
       <thead>
         <ClientsHeadingRow actions={actions} />
       </thead>

@@ -1,0 +1,9 @@
+.row {
+  border-radius: 0.25rem;
+}
+
+.cell {
+  background-color: #fff;
+  padding: 1rem 1rem;
+  border-radius: 0.25rem;
+}
