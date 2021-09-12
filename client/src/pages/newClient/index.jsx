@@ -100,6 +100,15 @@ export default function NewClientPage() {
           />
         </div>
         <div className="newClient__formRow">
+          <label>Phone</label>
+          <input
+            {...register("phone", {
+              required: true,
+            })}
+            type="text"
+          />
+        </div>
+        <div className="newClient__formRow">
           <label>Address</label>
           <input
             {...register("address1", {

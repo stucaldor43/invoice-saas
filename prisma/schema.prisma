@@ -19,6 +19,7 @@ model Client {
   firstName String
   lastName String
   fullName String
+  phone String
   invoices Invoice[]
   clientType ClientType
   user User @relation(fields: [userId], references: [id])
@@ -51,8 +52,8 @@ model Invoice {
   invoiceId Int @default(autoincrement()) @id
   dateCreated DateTime @default(now())
   dateDue DateTime
-  status InvoiceStatus
-  posthookUrl String
+  status InvoiceStatus @default(PENDING)
+  posthookUrl String?
   total Decimal
   taxRate Decimal
   subTotal Decimal

@@ -11,6 +11,7 @@ export async function addClient(data, { user }) {
     zipCode,
     city,
     state,
+    phone,
   } = data;
 
   const client = await prisma.client.create({
@@ -23,6 +24,7 @@ export async function addClient(data, { user }) {
       clientType,
       userId: user.id,
       address: { create: { address1, zipCode, city, state } },
+      phone,
     },
   });
 
@@ -57,6 +59,9 @@ export async function getClientsBySearchTerm({ searchTerm, pagination, sort }) {
         contains: searchTerm,
         mode: "insensitive",
       },
+    },
+    include: {
+      address: true,
     },
     take: pagination.take,
     skip: pagination.skip,
