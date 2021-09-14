@@ -17,8 +17,13 @@ export function InvoiceItemRow({ item, editItem, removeItem }) {
         <input
           className={styles.input}
           type="text"
-          value={item.cost}
-          onChange={(e) => editItem(item.id, { cost: e.target.value })}
+          value={item.price}
+          onChange={(e) =>
+            editItem(item.id, {
+              price: e.target.value,
+              cost: Number(e.target.value) * item.quantity,
+            })
+          }
         />
       </td>
       <td className={styles.dataCell}>
@@ -26,14 +31,19 @@ export function InvoiceItemRow({ item, editItem, removeItem }) {
           className={styles.input}
           type="text"
           value={item.quantity}
-          onChange={(e) => editItem(item.id, { quantity: e.target.value })}
+          onChange={(e) =>
+            editItem(item.id, {
+              quantity: e.target.value,
+              cost: Number(e.target.value) * item.price,
+            })
+          }
         />
       </td>
       <td className={styles.dataCell}>
         <input
           className={styles.input}
           type="text"
-          value={Number(item.cost * item.quantity).toFixed(2)}
+          value={Number(item.cost).toFixed(2)}
           readOnly
         />
       </td>

@@ -11,9 +11,7 @@ import { debounce } from "./../../utils/debounce";
 import { ClientService } from "../../services/client-service";
 
 export function InvoiceCreationPage() {
-  const [invoiceItems, setInvoiceItems] = useState([
-    { id: 1, name: "", cost: 15.0, quantity: 3 },
-  ]);
+  const [invoiceItems, setInvoiceItems] = useState([]);
   const [taxPercentage, setTaxPercentage] = useState(0.08);
   const [discount, setDiscount] = useState(2.0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -57,8 +55,9 @@ export function InvoiceCreationPage() {
         {
           id: uuid(),
           name: "",
-          cost: Number(1.0).toFixed(2),
+          price: Number(1.0),
           quantity: 1,
+          cost: Number(1.0),
         },
       ])
     );
@@ -85,7 +84,7 @@ export function InvoiceCreationPage() {
   }
 
   const subTotal = invoiceItems.reduce((acc, item) => {
-    return acc + item.cost * item.quantity;
+    return acc + item.cost;
   }, 0);
 
   const tax = taxPercentage * (subTotal - discount);
