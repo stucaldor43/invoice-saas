@@ -1,11 +1,14 @@
 import { Heading } from "./../../components/Heading/index";
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { InvoiceItemsTable } from "./../../components/InvoiceItemsTable";
 import { Button } from "./../../components/Button";
 import { v4 as uuid } from "uuid";
 import styles from "./styles.module.css";
 import Switch from "./../../components/Switch";
 import { useForm } from "react-hook-form";
+import { AutoComplete } from "../../components/AutoComplete";
+import { debounce } from "./../../utils/debounce";
+import { ClientService } from "../../services/client-service";
 
 export function InvoiceCreationPage() {
   const [invoiceItems, setInvoiceItems] = useState([
@@ -13,13 +16,40 @@ export function InvoiceCreationPage() {
   ]);
   const [taxPercentage, setTaxPercentage] = useState(0.08);
   const [discount, setDiscount] = useState(2.0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [clientSuggestions, setClientSuggestions] = useState([]);
+  const [isClientDropdownOpen, setIsClientDropdownOpen] = useState(false);
 
   const {
     register,
     watch,
     formState: { errors },
     handleSubmit,
+    setValue,
   } = useForm();
+
+  useEffect(
+    function () {
+      if (searchTerm !== "") {
+        verify(searchTerm);
+      }
+    },
+    [searchTerm]
+  );
+
+  const verify = useCallback(
+    debounce(async (searchTerm) => {
+      const { clients } = await ClientService.getClientsBySearchTerm({
+        q: searchTerm,
+        ...{ limit: 5, offset: 0, sort: "first_name,last_name" },
+      });
+
+      setClientSuggestions(
+        clients.map((client) => ({ ...client, selected: false }))
+      );
+    }, 300),
+    []
+  );
 
   function addItem() {
     setInvoiceItems(
@@ -45,8 +75,32 @@ export function InvoiceCreationPage() {
     setInvoiceItems(invoiceItems.filter((item) => item.id !== id));
   }
 
-  async function onCreate() {
+  function yyyyMMDDToTimestamp(date) {
+    const [year, month, day] = date.split("-");
+    const time = new Date();
+    const offset = time.getTimezoneOffset() / 60;
+    return `${year}-${month}-${day} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}${
+      offset > 0 ? "+" : "-"
+    }${offset}}`;
+  }
+
+  const subTotal = invoiceItems.reduce((acc, item) => {
+    return acc + item.cost * item.quantity;
+  }, 0);
+
+  const tax = taxPercentage * (subTotal - discount);
+
+  const amountDue = subTotal - discount + tax;
+
+  async function onCreate(data) {
     alert("create");
+    console.log({
+      ...data,
+      total: amountDue,
+      subTotal,
+      taxRate: taxPercentage,
+      clientId: clientSuggestions.find((client) => client.selected).clientId,
+    });
     /* 
       try {
         await request
@@ -65,13 +119,23 @@ export function InvoiceCreationPage() {
     alert("preview");
   }
 
-  const subTotal = invoiceItems.reduce((acc, item) => {
-    return acc + item.cost * item.quantity;
-  }, 0);
+  function completeFields(id) {
+    const client = clientSuggestions.find(
+      (suggestion) => suggestion.clientId === id
+    );
 
-  const tax = taxPercentage * (subTotal - discount);
+    setClientSuggestions(
+      clientSuggestions.map((clientSuggestion) =>
+        clientSuggestion.clientId === id
+          ? { ...clientSuggestion, selected: true }
+          : { ...clientSuggestion, selected: false }
+      )
+    );
 
-  const amountDue = subTotal - discount + tax;
+    setValue("abcd", client.fullName);
+    setIsClientDropdownOpen(false);
+    setSearchTerm("");
+  }
 
   return (
     <main className={styles.main}>
@@ -100,30 +164,29 @@ export function InvoiceCreationPage() {
                 <div>
                   <label className={styles.leftLabel}>Due date</label>
                   <input
-                    {...register("dueDate", { required: true })}
+                    {...register("dateDue", { required: true })}
                     type="date"
                     className={styles.leftInput}
                   ></input>
-                  {errors.dueDate && errors.dueDate.type === "required" && (
+                  {errors.dateDue && errors.dateDue.type === "required" && (
                     <span className={styles.error}>Due date is required</span>
                   )}
                 </div>
                 <div>
                   <label className={styles.leftLabel}>Description</label>
                   <input
-                    {...register("description", {
+                    {...register("notes", {
                       maxLength: 512,
                     })}
                     type="text"
                     className={styles.leftInput}
                   ></input>
-                  {errors.description &&
-                    errors.description.type === "maxLength" && (
-                      <span className={styles.error}>
-                        Description can not be greater than 512 characters in
-                        length
-                      </span>
-                    )}
+                  {errors.notes && errors.notes.type === "maxLength" && (
+                    <span className={styles.error}>
+                      Description can not be greater than 512 characters in
+                      length
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -132,7 +195,49 @@ export function InvoiceCreationPage() {
             <div className={styles.billTo}>
               <div className={styles.areaHeading}>Bill to</div>
               <div>
-                <div>
+                <div className={styles.clientInputContainer}>
+                  <label className={styles.leftLabel}>Name</label>
+                  <input
+                    onClick={() => setIsClientDropdownOpen(true)}
+                    {...register("abcd", {
+                      required: true,
+                      maxLength: 256,
+                    })}
+                    placeholder="Select Customer"
+                    type="text"
+                    className={styles.leftInput}
+                    readOnly
+                  ></input>
+                  {isClientDropdownOpen ? (
+                    <AutoComplete
+                      suggestions={clientSuggestions.map((suggestion) => ({
+                        id: suggestion.clientId,
+                        text: suggestion.fullName,
+                      }))}
+                      onClick={completeFields}
+                      close={() => setIsClientDropdownOpen(false)}
+                    >
+                      <input
+                        className={styles.autoCompleteInput}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      ></input>
+                    </AutoComplete>
+                  ) : null}
+                  {/* {errors.clientCompany &&
+                    errors.clientCompany.type === "required" && (
+                      <span className={styles.error}>
+                        Client company is required
+                      </span>
+                    )}
+                  {errors.clientCompany &&
+                    errors.clientCompany.type === "maxLength" && (
+                      <span className={styles.error}>
+                        Name of client company can not exceed 256 characters.
+                      </span>
+                    )} */}
+                </div>
+                {/* <div>
                   <label className={styles.leftLabel}>Company</label>
                   <input
                     {...register("clientCompany", {
@@ -154,8 +259,8 @@ export function InvoiceCreationPage() {
                         Name of client company can not exceed 256 characters.
                       </span>
                     )}
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <label className={styles.leftLabel}>Client Address</label>
                   <input
                     {...register("clientAddress", {
@@ -177,10 +282,10 @@ export function InvoiceCreationPage() {
                         Address of client company can not exceed 256 characters.
                       </span>
                     )}
-                </div>
+                </div> */}
               </div>
             </div>
-            <div className={styles.billFrom}>
+            {/* <div className={styles.billFrom}>
               <div className={styles.areaHeading}>Bill from</div>
               <div>
                 <div>
@@ -230,7 +335,7 @@ export function InvoiceCreationPage() {
                     )}
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="createInvoice__itemSection">
