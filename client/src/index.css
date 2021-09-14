@@ -2,6 +2,17 @@ html {
   --grey: #e4e4e4;
   --blue: #3182ce;
   --red: #ff0000;
+  --color-background: #f9fafe;
+  --color-background-light: #fff;
+  --color-border: #f5f6fe;
+  --color-primary: rgb(196, 181, 253);
+
+  --spacing-x-large: 2rem;
+  --spacing-large: 1.5rem;
+  --spacing-medium: 1rem;
+  --spacing-small: 0.75rem;
+  --spacing-x-small: 0.5rem;
+  --spacing-xx-small: 0.25rem;
 
   --warning: var(--red, red);
   --inputBorder: var(--grey, #e4e4e4);

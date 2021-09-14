@@ -1,0 +1,12 @@
+.autoComplete {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background-color: var(--color-background-light, #fff);
+  border: thin solid var(--color-border, #f5f6fe);
+}
+
+.inputContainer {
+  padding: var(--spacing-x-small, 0.5rem);
+}
