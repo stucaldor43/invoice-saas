@@ -1536,7 +1536,7 @@ const clients = [
 
 export async function seedClients() {
   return Promise.all(
-    clients.map((c) => addClients(c, { user: { id: 2 } }))
+    clients.map((c) => addClients(c, { user: { id: 4 } }))
   ).then((values) => (process.exitCode = 1));
 }
 
