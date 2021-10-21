@@ -1,6 +1,7 @@
 import express, { request } from "express";
 import {
   addClient,
+  getClient,
   getClients,
   getClientsBySearchTerm,
 } from "./../models/client";
@@ -104,6 +105,18 @@ router.get("/", authorize("read:client"), async function (req, res) {
     const clients = await getClients({ pagination, filters, sort });
 
     res.status(200).json(clients);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+router.get("/:id", authorize("read:client"), async function (req, res) {
+  try {
+    const client = await getClient({ clientId: Number(req.params.id) });
+    if (req.session.user.id !== client.user.id) return res.sendStatus(401);
+
+    res.status(201).json(client);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);

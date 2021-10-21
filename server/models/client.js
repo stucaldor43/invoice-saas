@@ -31,6 +31,40 @@ export async function addClient(data, { user }) {
   return client;
 }
 
+export async function getClient(filters) {
+  try {
+    const client = await prisma.client.findUnique({
+      where: { ...filters },
+      select: {
+        clientId: true,
+        email: true,
+        companyName: true,
+        firstName: true,
+        lastName: true,
+        fullName: true,
+        phone: true,
+        address: {
+          select: {
+            addressId: true,
+            address1: true,
+            city: true,
+            state: true,
+            zipCode: true,
+          },
+        },
+        user: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    return client;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function getClients({ filters, pagination, sort }) {
   const clients = await prisma.client.findMany({
     where: filters,
