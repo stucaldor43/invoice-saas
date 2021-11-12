@@ -17,11 +17,11 @@ export function InvoiceItemRow({ item, editItem, removeItem }) {
         <input
           className={styles.input}
           type="text"
-          value={item.price}
+          value={`$${item.price}`}
           onChange={(e) =>
             editItem(item.id, {
-              price: e.target.value,
-              cost: Number(e.target.value) * item.quantity,
+              price: e.target.value.slice(1),
+              cost: Number(e.target.value.slice(1)) * item.quantity,
             })
           }
         />

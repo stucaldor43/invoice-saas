@@ -9,11 +9,13 @@ import { useForm } from "react-hook-form";
 import { AutoComplete } from "../../components/AutoComplete";
 import { debounce } from "./../../utils/debounce";
 import { ClientService } from "../../services/client-service";
+import { InvoiceService } from "../../services/invoice-service";
+import { useRouter } from "./../../hooks/useRouter";
 
 export function InvoiceCreationPage() {
   const [invoiceItems, setInvoiceItems] = useState([]);
   const [taxPercentage, setTaxPercentage] = useState(0.08);
-  const [discount, setDiscount] = useState(2.0);
+  const [discount, setDiscount] = useState(0.0);
   const [searchTerm, setSearchTerm] = useState("");
   const [clientSuggestions, setClientSuggestions] = useState([]);
   const [isClientDropdownOpen, setIsClientDropdownOpen] = useState(false);
@@ -25,6 +27,8 @@ export function InvoiceCreationPage() {
     handleSubmit,
     setValue,
   } = useForm();
+
+  const { push } = useRouter();
 
   useEffect(
     function () {
@@ -92,14 +96,30 @@ export function InvoiceCreationPage() {
   const amountDue = subTotal - discount + tax;
 
   async function onCreate(data) {
-    alert("create");
-    console.log({
+    const form = {
       ...data,
+      dateDue: new Date(data.dateDue).toISOString(),
+      issueDate: new Date(data.issueDate).toISOString(),
       total: amountDue,
       subTotal,
       taxRate: taxPercentage,
       clientId: clientSuggestions.find((client) => client.selected).clientId,
-    });
+      items: invoiceItems.map(({ name, price, quantity, cost }) => ({
+        name,
+        price,
+        quantity,
+        cost,
+      })),
+    };
+
+    console.log(form);
+
+    try {
+      await InvoiceService.addInvoice(form);
+      push("/");
+    } catch (error) {
+      console.log(error);
+    }
     /* 
       try {
         await request

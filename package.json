@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vite",
     "server:start": "node -r esm ./server/app.js",
+    "server:s": "node ./server/app.js",
     "build": "vite build",
     "serve": "vite preview",
     "test": "jest -i",
@@ -15,7 +16,6 @@
     "seed": "npx prisma db seed --preview-feature",
     "fix": "./node_modules/esbuild/install.js"
   },
-  "type": "module",
   "dependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.16.0",
     "@prisma/client": "^2.28.0",
@@ -27,6 +27,7 @@
     "date-fns": "^2.24.0",
     "delay": "^5.0.0",
     "dotenv": "^10.0.0",
+    "dotenv-cli": "^4.1.0",
     "ejs": "^3.1.6",
     "esm": "^3.2.25",
     "events": "^3.3.0",

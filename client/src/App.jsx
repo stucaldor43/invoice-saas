@@ -5,6 +5,7 @@ import Home from "./pages/home/index.jsx";
 import SiginPage from "./pages/signin/index.jsx";
 import ClientsPage from "./pages/clients/index.jsx";
 import NewClientPage from "./pages/newClient/index.jsx";
+import { SignUpPage } from "./pages/signup/index.jsx";
 import { Navigation } from "./components/Navigation/index.jsx";
 import styles from "./App.module.css";
 import { InvoiceCreationPage } from "./pages/invoice-creation/index";
@@ -41,6 +42,9 @@ function App() {
               </Route>
               <Route path="/signin">
                 <SiginPage />
+              </Route>
+              <Route path="/signup">
+                <SignUpPage />
               </Route>
               <Route path="/clients">
                 <ClientsPage />
