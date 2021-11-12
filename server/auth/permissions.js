@@ -1,4 +1,4 @@
-export const PERMISSIONS = {
+const PERMISSIONS = {
   USER: Object.freeze([
     "create:user",
     "read:user",
@@ -10,3 +10,8 @@ export const PERMISSIONS = {
     "update:client",
   ]),
 };
+
+module.exports = {
+  PERMISSIONS,
+  default: PERMISSIONS
+}

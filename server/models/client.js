@@ -1,6 +1,6 @@
-import { prisma } from "./../database/prisma";
+const { prisma } = require("./../database/prisma");
 
-export async function addClient(data, { user }) {
+async function addClient(data, { user }) {
   const {
     firstName,
     lastName,
@@ -31,7 +31,7 @@ export async function addClient(data, { user }) {
   return client;
 }
 
-export async function getClient(filters) {
+async function getClient(filters) {
   try {
     const client = await prisma.client.findUnique({
       where: { ...filters },
@@ -65,7 +65,7 @@ export async function getClient(filters) {
   }
 }
 
-export async function getClients({ filters, pagination, sort }) {
+async function getClients({ filters, pagination, sort }) {
   const clients = await prisma.client.findMany({
     where: filters,
     take: pagination.take,
@@ -86,7 +86,7 @@ export async function getClients({ filters, pagination, sort }) {
   };
 }
 
-export async function getClientsBySearchTerm({ searchTerm, pagination, sort }) {
+async function getClientsBySearchTerm({ searchTerm, pagination, sort }) {
   const clients = await prisma.client.findMany({
     where: {
       fullName: {
@@ -118,4 +118,11 @@ export async function getClientsBySearchTerm({ searchTerm, pagination, sort }) {
     hasMore: pagination.take + pagination.skip < clientCount,
     pageCount: Math.ceil(clientCount / pagination.take),
   };
+}
+
+module.exports = {
+  addClient,
+  getClient,
+  getClients,
+  getClientsBySearchTerm
 }

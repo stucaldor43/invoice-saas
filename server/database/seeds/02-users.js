@@ -1,4 +1,4 @@
-import { addUser } from "../../models/user";
+const { addUser } = require("../../models/user");
 
 const users = [
   {
@@ -27,7 +27,7 @@ const users = [
   },
 ];
 
-export async function seedUsers() {
+async function seedUsers() {
   return Promise.all(users.map((user) => addUser(user))).then(
     () => (process.exitCode = 1)
   );
@@ -43,3 +43,7 @@ seedUsers()
   .finally(() => {
     process.exit(0);
   });
+
+module.exports = {
+  seedUsers
+}

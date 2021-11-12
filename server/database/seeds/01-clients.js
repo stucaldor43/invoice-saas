@@ -1,4 +1,4 @@
-import { prisma } from "./../prisma";
+const { prisma } = require("./../prisma");
 
 async function addClients(data, { user }) {
   const {
@@ -1534,7 +1534,7 @@ const clients = [
   },
 ];
 
-export async function seedClients() {
+async function seedClients() {
   return Promise.all(
     clients.map((c) => addClients(c, { user: { id: 4 } }))
   ).then((values) => (process.exitCode = 1));
@@ -1550,3 +1550,7 @@ seedClients()
   .finally(() => {
     process.exit(0);
   });
+
+module.exports = {
+  seedClients
+}

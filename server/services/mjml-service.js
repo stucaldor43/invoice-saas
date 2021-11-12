@@ -1,9 +1,13 @@
-import mjml2html from "mjml";
+const mjml2html = require("mjml");
 
-export class MjmlService {
+class MjmlService {
   constructor() {}
 
   static render(template, options) {
     return mjml2html(template, options);
   }
+}
+
+module.exports = {
+  MjmlService
 }

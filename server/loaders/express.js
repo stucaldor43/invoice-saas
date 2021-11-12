@@ -1,9 +1,9 @@
-import cors from "cors";
-import express from "express";
-import apiRouter from "./../api";
-import { addUser, getUser, getUserByCredentials } from "./../models/user";
-import { PERMISSIONS } from "./../auth/permissions";
-import { PLAN } from "./../constants/plans";
+const cors = require("cors");
+const express = require("express");
+const apiRouter = require("./../api");
+const { addUser, getUser, getUserByCredentials } = require("./../models/user");
+const { PERMISSIONS } = require("./../auth/permissions");
+const { PLAN } = require("./../constants/plans");
 
 const corsOptions = {
   origin: "http://localhost:3000",
@@ -13,7 +13,7 @@ const corsOptions = {
   credentials: true,
 };
 
-export default async function ({ app }) {
+async function addMiddleware({ app }) {
   app.use(cors(corsOptions));
   app.options("*", cors(corsOptions));
   app.use(express.json());
@@ -36,7 +36,14 @@ export default async function ({ app }) {
           .send({ error: `User with the name ${name} already exists` });
       }
 
-      const newUser = await addUser({ email, password, plan: PLAN.BASIC });
+      const newUser = await addUser({
+        email,
+        password,
+        plan: PLAN.BASIC,
+        phone: "",
+        firstName: "",
+        lastName: "",
+      });
 
       res.status(201).json(newUser);
     } catch (error) {
@@ -80,3 +87,5 @@ export default async function ({ app }) {
     res.clearCookie("login", { ...authCookie, maxAge: -1 }).sendStatus(204);
   });
 }
+
+module.exports = addMiddleware

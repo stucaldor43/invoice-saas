@@ -1,6 +1,6 @@
-import express from "express";
-import { getUser } from "./../models/user";
-import { authorize } from "../middleware/auth";
+const express = require("express");
+const { getUser } = require("./../models/user");
+const { authorize } = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -17,4 +17,4 @@ router.get("/:id", authorize("read:user"), async function (req, res) {
   }
 });
 
-export default router;
+module.exports = router;

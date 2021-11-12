@@ -1,11 +1,11 @@
-import express, { request } from "express";
-import {
+const express = require("express");
+const {
   addClient,
   getClient,
   getClients,
   getClientsBySearchTerm,
-} from "./../models/client";
-import { authorize } from "../middleware/auth";
+} = require("./../models/client");
+const { authorize } = require("../middleware/auth");
 
 const router = express.Router();
 
@@ -149,4 +149,4 @@ router.get("/search", authorize("read:client"), async function (req, res) {
   }
 });
 
-export default router;
+module.exports = router;

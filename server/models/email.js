@@ -1,6 +1,6 @@
-import { prisma } from "./../database/prisma";
+const { prisma } = require("./../database/prisma");
 
-export async function createEmail({ template, message, locals, response }) {
+async function createEmail({ template, message, locals, response }) {
   const email = await prisma.email.create({
     data: {
       template,
@@ -11,4 +11,8 @@ export async function createEmail({ template, message, locals, response }) {
   });
 
   return email;
+}
+
+module.exports = {
+  createEmail
 }

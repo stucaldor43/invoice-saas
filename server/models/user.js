@@ -1,9 +1,24 @@
-import { prisma } from "../database/prisma";
+const { prisma } = require("./../database/prisma");
 
-export async function addUser({ email, password, plan }) {
+async function addUser({
+  email,
+  password,
+  plan,
+  phone,
+  firstName,
+  lastName,
+}) {
   try {
     const user = await prisma.user.create({
-      data: { email, password, plan },
+      data: {
+        email,
+        password,
+        plan,
+        phone,
+        firstName,
+        lastName,
+        fullName: `${firstName} ${lastName}`,
+      },
       select: { id: true, email: true, role: true },
     });
 
@@ -13,11 +28,28 @@ export async function addUser({ email, password, plan }) {
   }
 }
 
-export async function getUser(filters) {
+async function getUser(filters) {
   try {
     const user = await prisma.user.findUnique({
       where: { ...filters },
-      select: { id: true, email: true, role: true },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        phone: true,
+        firstName: true,
+        lastName: true,
+        fullName: true,
+        address: {
+          select: {
+            addressId: true,
+            address1: true,
+            city: true,
+            state: true,
+            zipCode: true,
+          },
+        },
+      },
     });
     return user;
   } catch (error) {
@@ -25,7 +57,7 @@ export async function getUser(filters) {
   }
 }
 
-export async function deleteUser(id) {
+async function deleteUser(id) {
   try {
     const user = await prisma.user.delete({
       where: id,
@@ -37,7 +69,7 @@ export async function deleteUser(id) {
   }
 }
 
-export async function getUserByCredentials({ email, password }) {
+async function getUserByCredentials({ email, password }) {
   try {
     const user = await prisma.user.findFirst({
       where: { email, password },
@@ -47,4 +79,11 @@ export async function getUserByCredentials({ email, password }) {
   } catch (error) {
     throw error;
   }
+}
+
+module.exports = {
+  addUser,
+  getUser,
+  deleteUser,
+  getUserByCredentials
 }

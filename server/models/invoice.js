@@ -1,6 +1,6 @@
-import { prisma } from "./../database/prisma";
+const { prisma } = require("./../database/prisma");
 
-export async function addInvoice(data, { user }) {
+async function addInvoice(data, { user }) {
   const { dateDue, posthookUrl, total, taxRate, subTotal, notes, clientId } =
     data;
 
@@ -31,7 +31,7 @@ export async function addInvoice(data, { user }) {
   return invoice;
 }
 
-export async function getInvoice(filters) {
+async function getInvoice(filters) {
   try {
     const invoice = await prisma.invoice.findUnique({
       where: { ...filters },
@@ -43,7 +43,7 @@ export async function getInvoice(filters) {
   }
 }
 
-export async function getInvoices({ filters, pagination, sort }) {
+async function getInvoices({ filters, pagination, sort }) {
   const invoices = await prisma.invoice.findMany({
     where: filters,
     take: pagination.take,
@@ -68,7 +68,7 @@ export async function getInvoices({ filters, pagination, sort }) {
   };
 }
 
-export async function editInvoice(id, newInvoiceData) {
+async function editInvoice(id, newInvoiceData) {
   const originalInvoice = await getInvoice({ invoiceId: id });
 
   const invoice = await prisma.invoice.update({
@@ -77,4 +77,11 @@ export async function editInvoice(id, newInvoiceData) {
   });
 
   return invoice;
+}
+
+module.exports = {
+  addInvoice,
+  getInvoice,
+  getInvoices,
+  editInvoice
 }

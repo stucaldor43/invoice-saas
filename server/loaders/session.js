@@ -1,8 +1,12 @@
-import session from "express-session";
-import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import { prisma } from "./../database/prisma.js";
+// import session from "express-session";
+// import { PrismaSessionStore } from "@quixo3/prisma-session-store";
+// import { prisma } from "./../database/prisma.js";
 
-export default async function ({ app }) {
+const session = require("express-session");
+const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
+const { prisma } = require("./../database/prisma")
+
+async function addSessionMiddleware({ app }) {
   app.use(
     session({
       cookie: {
@@ -23,3 +27,5 @@ export default async function ({ app }) {
     })
   );
 }
+
+module.exports = addSessionMiddleware

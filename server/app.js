@@ -1,6 +1,6 @@
-import "./config";
-import express from "express";
-import loaders from "./loaders";
+require("./config");
+const express = require("express");
+const loaders = require("./loaders");
 
 async function startServer() {
   const app = express();

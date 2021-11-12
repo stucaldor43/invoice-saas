@@ -1,6 +1,6 @@
-import Queue from "./queue";
+const Queue = require("./queue");
 
-export default function pLimit(concurrency) {
+function pLimit(concurrency) {
   if (
     !(
       (Number.isInteger(concurrency) ||
@@ -73,3 +73,5 @@ export default function pLimit(concurrency) {
 
   return generator;
 }
+
+module.exports = pLimit
